@@ -1,23 +1,11 @@
-﻿namespace Competition2___Inheritence;
 
-class Program
+using System;
+using System.Collections.Generic;
+
+
+namespace LibrarySystem
 {
-    static void Main(string[] args)
-    {
-        Patrons p = new Patrons("Alice", 101);
-        p.ShowInfo(); 
-
-        Student s = new Student("Bob", "bob@email.com", 102, "CS", 2025);
-        s.ShowInfo();
-
-        Staff f = new Staff("Liliy", "1232@usf.edu", 007, "professor", "CS");
-        f.ShowInfo();
-
-        Console.ReadKey();
-    }
-
-
-    public class Person
+  public class Person
     {
         protected string _name;
         protected string _email;
@@ -73,6 +61,74 @@ class Program
         {
             Console.WriteLine($"Name: {_name}, ID: {_id}");
         }
+    } 
+  
+  public class Book
+    {
+        private string _title;
+        private string _author;
+        private string _ISBN;
+        private int _copies;
+
+
+        // Constructor to initialize the fields
+        public Book(string title, string author, string isbn, int copies)
+        {
+            _title = title;   // Assigning values passed in the constructor to the private fields
+            _author = author;
+            _ISBN = isbn;
+            _copies = copies;
+        }
+
+        // Public method to borrow book
+        public bool BorrowBook()
+        {
+            if (_copies > 0)
+            {
+                _copies--;
+                return true;
+            }
+            return false;
+        }
+
+        // Public method to return book
+        public void ReturnBook()
+        {
+            _copies++;
+        }
+
     }
+  
+  
+    public class Library
+    {
+        public List<Patron> DisplayPatrons { get; set; }
+        public List<Book> DisplayBooks { get; set; }
+
+        public Library()
+        {
+            DisplayPatrons = new List<Patron>();
+            DisplayBooks = new List<Book>();
+        }
+
+        public void ShowAllPatrons()
+        {
+            Console.WriteLine("Library Patrons:");
+            foreach (var patron in DisplayPatrons)
+            {
+                Console.WriteLine(patron);
+            }
+        }
+
+        public void ShowAllBooks()
+        {
+            Console.WriteLine("Library Books:");
+            foreach (var book in DisplayBooks)
+            {
+                Console.WriteLine(book);
+            }
+        }
+   
+
 }
 
