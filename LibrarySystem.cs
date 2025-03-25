@@ -1,86 +1,68 @@
-
 using System;
 using System.Collections.Generic;
-
-
+ 
 namespace LibrarySystem
 {
-  public class Person
+    public class Person
     {
-        protected string _name;
-        protected string _email;
-        protected int _id;
-
-        public Person(string name, string email, int id)
+        public string _name;
+        public string _email;
+        public string _id;
+ 
+        public Person(string name, string email, string id)
         {
             _name = name;
             _email = email;
             _id = id;
         }
-
+ 
         public void ShowInfo()
         {
-            Console.WriteLine($"Name: {_name}, Email: {_email}, ID: {_id}");
+            Console.WriteLine($"Name: {_name}, ID: {_id}");
         }
     }
-
+ 
     public class Student : Person
     {
-        protected string _major;
-        protected int _graduationyear;
-
-        public Student(string name, string email, int id, string major, int graduationyear)
+        public string _major;
+        public int _graduationyear;
+ 
+        public Student(string name, string email, string id, string major, int graduationyear)
             : base(name, email, id)
         {
             _major = major;
             _graduationyear = graduationyear;
         }
     }
-
+ 
     public class Staff : Person
     {
-        protected string _position;
-        protected string _department;
-
-        public Staff(string name, string email, int id, string position, string department)
+        public string _position;
+        public string _department;
+ 
+        public Staff(string name, string email, string id, string position, string department)
             : base(name, email, id)
         {
             _position = position;
             _department = department;
         }
     }
-
-    public class Patrons : Person
+ 
+    public class Book
     {
-        public Patrons(string name, int id)
-            : base(name, "N/A", id)
-        {
-        }
-
-        public new void ShowInfo()
-        {
-            Console.WriteLine($"Name: {_name}, ID: {_id}");
-        }
-    } 
-  
-  public class Book
-    {
-        private string _title;
-        private string _author;
-        private string _ISBN;
-        private int _copies;
-
-
-        // Constructor to initialize the fields
+        public string _title;
+        public string _author;
+        public string _ISBN;
+        public int _copies;
+ 
         public Book(string title, string author, string isbn, int copies)
         {
-            _title = title;   // Assigning values passed in the constructor to the private fields
+            _title = title;
             _author = author;
             _ISBN = isbn;
             _copies = copies;
         }
-
-        // Public method to borrow book
+ 
         public bool BorrowBook()
         {
             if (_copies > 0)
@@ -90,45 +72,105 @@ namespace LibrarySystem
             }
             return false;
         }
-
-        // Public method to return book
-        public void ReturnBook()
+ 
+        public void ShowInfo()
         {
-            _copies++;
+            Console.WriteLine($"Title: {_title}, Author: {_author}, Available Copies: {_copies}");
         }
-
     }
-  
-  
+ 
     public class Library
     {
-        public List<Patron> DisplayPatrons { get; set; }
+        public List<Person> DisplayPatrons { get; set; }
         public List<Book> DisplayBooks { get; set; }
-
+ 
         public Library()
         {
-            DisplayPatrons = new List<Patron>();
+            DisplayPatrons = new List<Person>();
             DisplayBooks = new List<Book>();
         }
-
+ 
+        public void AddPatron(Person patron)
+        {
+            DisplayPatrons.Add(patron);
+        }
+ 
+        public void AddBook(Book book)
+        {
+            DisplayBooks.Add(book);
+        }
+ 
         public void ShowAllPatrons()
         {
-            Console.WriteLine("Library Patrons:");
             foreach (var patron in DisplayPatrons)
             {
-                Console.WriteLine(patron);
+                patron.ShowInfo();
             }
         }
-
+ 
         public void ShowAllBooks()
         {
-            Console.WriteLine("Library Books:");
             foreach (var book in DisplayBooks)
             {
-                Console.WriteLine(book);
+                book.ShowInfo();
             }
         }
-   
-
+ 
+        public void BorrowBook(Person patron, string bookTitle)
+        {
+            Book book = DisplayBooks.Find(b => b._title == bookTitle);
+            if (book != null && book.BorrowBook())
+            {
+                Console.WriteLine($"{patron._name} borrowed '{book._title}'");
+            }
+            else
+            {
+                Console.WriteLine($"Sorry, '{bookTitle}' is not available.");
+            }
+        }
+    }
+ 
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create books
+            Book b1 = new Book("The Art of Data Strategy", "Liam Reynolds", "ISBN111", 4);
+            Book b2 = new Book("Business Insights with AI", "Olivia Carter", "ISBN222", 3);
+            Book b3 = new Book("Analytics in Action", "Nathan Brooks", "ISBN333", 6);
+ 
+            // Create students
+            Student s1 = new Student("Akhil", "akhil@usf.edu", "S001", "Business Analytics", 2026);
+            Student s2 = new Student("Sandeep", "sandeep@usf.edu", "S002", "Information Systems", 2025);
+ 
+            // Create staff
+            Staff st1 = new Staff("Grandon Gill", "grandon@usf.edu", "ST001", "Librarian", "Library Services");
+ 
+            // Create library and add books and patrons
+            Library library = new Library();
+            library.AddBook(b1);
+            library.AddBook(b2);
+            library.AddBook(b3);
+            library.AddPatron(s1);
+            library.AddPatron(s2);
+            library.AddPatron(st1);
+ 
+            // Display initial library information
+            Console.WriteLine("Books in Library:");
+            library.ShowAllBooks();
+ 
+            Console.WriteLine("\nPatrons in Library:");
+            library.ShowAllPatrons();
+ 
+            // Borrow books
+            Console.WriteLine("\nBorrowing Books...");
+            library.BorrowBook(s2, "Business Insights with AI");
+            library.BorrowBook(s1, "Analytics in Action");
+ 
+            // Display updated library information
+            Console.WriteLine("\nBooks after borrowing:");
+            Console.WriteLine("Books in Library:");
+            library.ShowAllBooks();
+        }
+    }
 }
-
