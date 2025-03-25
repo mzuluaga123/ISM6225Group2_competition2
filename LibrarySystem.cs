@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 
 namespace LibrarySystem
 {
@@ -36,12 +39,39 @@ namespace LibrarySystem
         }
 
     }
-    class Program
+  
+
+
+namespace LibrarySystem
+{
+    public class Library
     {
-        static void Main(string[] args)
+        public List<Patron> DisplayPatrons { get; set; }
+        public List<Book> DisplayBooks { get; set; }
+
+        public Library()
         {
-            Book myBook = new Book("The Art of Data Strategy", "Liam Reynolds", "ISBN111", 4);
-            Console.WriteLine();
+            DisplayPatrons = new List<Patron>();
+            DisplayBooks = new List<Book>();
+        }
+
+        public void ShowAllPatrons()
+        {
+            Console.WriteLine("Library Patrons:");
+            foreach (var patron in DisplayPatrons)
+            {
+                Console.WriteLine(patron);
+            }
+        }
+
+        public void ShowAllBooks()
+        {
+            Console.WriteLine("Library Books:");
+            foreach (var book in DisplayBooks)
+            {
+                Console.WriteLine(book);
+            }
         }
     }
+
 }
